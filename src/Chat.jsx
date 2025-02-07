@@ -1,0 +1,130 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import "./App.css";
+
+const ChatModule = () => {
+  const [chatInput, setChatInput] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [notification, setNotification] = useState({ message: "", type: "" });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    fetchSessionInfo();
+  }, []);
+
+  const fetchSessionInfo = async () => {
+    try {
+      const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
+      console.log("Информация о сессии:", response.data);
+    } catch (error) {
+      console.error("Не удалось получить информацию о сессии:", error);
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) {
+      setNotification({ message: "Введите текст.", type: "error" });
+      return;
+    }
+
+    try {
+      const result = await axios.post("http://localhost:5001/api-request", {
+        text: chatInput,
+      });
+      setMessages([...messages, { text: chatInput, sender: "user" }]);
+      setChatInput("");
+      setNotification({
+        message: result.data.message,
+        type: result.data.success ? "success" : "error",
+      });
+    } catch (error) {
+      setNotification({ message: "Request Error", type: "error" });
+    }
+  };
+
+  return (
+    <div className="flex w-screen h-screen bg-gray-100 overflow-hidden">
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ x: -300 }}
+            animate={{ x: 0 }}
+            exit={{ x: -300 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gray-800 text-black w-64 p-4 shadow-lg h-full"
+          >
+            <button className="w-full text-black p-2 mb-4 hover:bg-gray-700 rounded">
+              Профиль
+            </button>
+            <div className="bg-gray-700 p-4 h-full shadow-inner rounded">
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="bg-gray-800 text-black p-4 shadow-lg">
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="text-black hover:bg-gray-700 p-2 rounded"
+          >
+            {isSidebarOpen ? "◀" : "▶"}
+          </button>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 p-4 overflow-auto bg-gray-50">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`mb-4 ${
+                msg.sender === "user" ? "text-right" : "text-left"
+              }`}
+            >
+              <div
+                className={`inline-block p-3 rounded-lg ${
+                  msg.sender === "user"
+                    ? "bg-blue-500 text-black"
+                    : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Chat Input */}
+        <div className="bg-white p-4 border-t">
+          <form onSubmit={onSubmit} className="flex">
+            <input
+              type="text"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              placeholder="Введите сообщение..."
+              className="flex-1 p-2 border rounded-l"
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 text-black p-2 rounded-r hover:bg-blue-600"
+            >
+              Отправить
+            </button>
+          </form>
+          {notification.message && (
+            <div
+              className={`mt-2 text-sm ${
+                notification.type === "success" ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              {notification.message}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChatModule;
