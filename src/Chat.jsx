@@ -28,21 +28,28 @@ const ChatModule = () => {
       setNotification({ message: "Введите текст.", type: "error" });
       return;
     }
-
+  
+    const newMessage = { text: chatInput, sender: "user" };
+    setMessages((prev) => [...prev, newMessage]);
+    setChatInput("");
+  
     try {
       const result = await axios.post("http://localhost:5001/api-request", {
         text: chatInput,
       });
-      setMessages([...messages, { text: chatInput, sender: "user" }]);
-      setChatInput("");
+  
+      const botReply = { text: result.data.message, sender: "bot" };
+      setMessages((prev) => [...prev, botReply]);
+  
       setNotification({
         message: result.data.message,
         type: result.data.success ? "success" : "error",
       });
     } catch (error) {
-      setNotification({ message: "Request Error", type: "error" });
+      setNotification({ message: "Ошибка запроса", type: "error" });
     }
   };
+  
 
   return (
     <div className="flex w-screen h-screen bg-gray-100 overflow-hidden">
