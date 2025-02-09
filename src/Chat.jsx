@@ -34,7 +34,7 @@ const ChatModule = () => {
     setChatInput("");
   
     try {
-      const result = await axios.post("http://localhost:5001/api-request", {
+      const result = await axios.post("http://localhost:5001/api-request", { withCredentials: true }, {
         text: chatInput,
       });
   

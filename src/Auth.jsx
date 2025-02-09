@@ -79,7 +79,7 @@ const AuthSwitcher = () => {
       const result = await axios.post('http://localhost:5001/log-in', {
         username,
         password,
-      });
+      }, { withCredentials: true });
 
       if (result.data.success) {
         setNotification({ message: result.data.message, type: 'success' });
