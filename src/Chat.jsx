@@ -34,13 +34,13 @@ const ChatModule = () => {
     setChatInput("");
   
     try {
-      const result = await axios.post("http://localhost:5001/api-request", { withCredentials: true }, {
+      const result = await axios.post("http://localhost:5001/api-request", {
         text: chatInput,
-      });
+      }, { withCredentials: true });
   
-      const botReply = { text: result.data.message, sender: "bot" };
+      const botReply = { text: result.data.request_url, sender: "bot" };
       setMessages((prev) => [...prev, botReply]);
-  
+      console.log(botReply);
       setNotification({
         message: result.data.message,
         type: result.data.success ? "success" : "error",
@@ -96,11 +96,21 @@ const ChatModule = () => {
                     : "bg-gray-200 text-gray-800"
                 }`}
               >
-                {msg.text}
+              {msg.sender === "bot" ? (
+                <>
+                  <audio controls>
+                    <source src={msg.text} type="audio/ogg" />
+
+                  </audio>
+                </>
+              ) : (
+                msg.text
+              )}
               </div>
             </div>
           ))}
         </div>
+
 
         {/* Chat Input */}
         <div className="bg-white p-4 border-t">
