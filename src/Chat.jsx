@@ -79,8 +79,6 @@ const ChatModule = () => {
             {isSidebarOpen ? "◀" : "▶"}
           </button>
         </div>
-
-        {/* Chat Messages */}
         <div className="flex-1 p-4 overflow-auto bg-gray-50">
           {messages.map((msg, index) => (
             <div
@@ -98,10 +96,8 @@ const ChatModule = () => {
               >
               {msg.sender === "bot" ? (
                 <>
-                  <audio controls>
-                    <source src={msg.text} type="audio/ogg" />
-
-                  </audio>
+                  <audio controls src={msg.text}></audio>
+                  <a href={msg.text}> Download audio </a>
                 </>
               ) : (
                 msg.text
@@ -110,9 +106,6 @@ const ChatModule = () => {
             </div>
           ))}
         </div>
-
-
-        {/* Chat Input */}
         <div className="bg-white p-4 border-t">
           <form onSubmit={onSubmit} className="flex">
             <input
