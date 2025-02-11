@@ -13,6 +13,32 @@ const ChatModule = () => {
     fetchSessionInfo();
   }, []);
 
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        const response = await axios.get("http://localhost:5001/chat-history", { withCredentials: true });
+        setMessages(response.data);
+      } catch (error) {
+        console.error("Ошибка загрузки истории чата:", error);
+      }
+    };
+    fetchChatHistory();
+  }, []);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
+        if (!response.data.user) {
+          window.location.href = "/auth";
+        }
+      } catch (error) {
+        window.location.href = "/auth";
+      }
+    };
+    checkSession();
+  }, []);
+
   const fetchSessionInfo = async () => {
     try {
       const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
@@ -97,7 +123,6 @@ const ChatModule = () => {
               {msg.sender === "bot" ? (
                 <>
                   <audio controls src={msg.text}></audio>
-                  <a href={msg.text}> Download audio </a>
                 </>
               ) : (
                 msg.text

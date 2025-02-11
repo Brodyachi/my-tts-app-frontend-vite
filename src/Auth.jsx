@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -43,11 +43,13 @@ const AuthSwitcher = () => {
   const onSubmit = async () => {
     if (isLogin) {
       await handleLogIn();
-      // window.location.href = "/chat";
+      window.location.href = "/chat";
     } else {
       await handleRegistrate();
     }
   };
+
+  
 
   const handleSendCode = async () => {
     if (!email) {
