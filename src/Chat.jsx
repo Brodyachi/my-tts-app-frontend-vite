@@ -16,7 +16,7 @@ const ChatModule = () => {
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/chat-history", { withCredentials: true });
+        const response = await axios.get("http://rasa-tts.com:5001/chat-history", { withCredentials: true });
         setMessages(response.data);
       } catch (error) {
         console.error("Ошибка загрузки истории чата:", error);
@@ -28,7 +28,7 @@ const ChatModule = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
+        const response = await axios.get("http://rasa-tts.com:5001/session-info", { withCredentials: true });
         if (!response.data.user) {
           window.location.href = "/auth";
         }
@@ -41,7 +41,7 @@ const ChatModule = () => {
 
   const fetchSessionInfo = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
+      const response = await axios.get("http://rasa-tts.com:5001/session-info", { withCredentials: true });
       console.log("Информация о сессии:", response.data);
     } catch (error) {
       console.error("Не удалось получить информацию о сессии:", error);
@@ -60,7 +60,7 @@ const ChatModule = () => {
     setChatInput("");
   
     try {
-      const result = await axios.post("http://localhost:5001/api-request", {
+      const result = await axios.post("http://rasa-tts.com:5001/api-request", {
         text: chatInput,
       }, { withCredentials: true });
   
