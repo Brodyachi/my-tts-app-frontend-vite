@@ -19,7 +19,7 @@ const registerSchema = yup.object().shape({
 
 const sendCodeToEmail = async (email) => {
   try {
-    const response = await axios.post('http://rasa-tts.com:5001/send-code', { email });
+    const response = await axios.post('http://localhost:5001/send-code', { email });
     return { success: true, message: response.data.message };
   } catch (error) {
     return { success: false, message: 'Ошибка отправки кода. Попробуйте снова.' + error };
@@ -63,7 +63,7 @@ const AuthSwitcher = () => {
 
   const handleRegistrate = async () => {
     try {
-      const result = await axios.post('http://rasa-tts.com:5001/verify-code', {
+      const result = await axios.post('http://localhost:5001/verify-code', {
         username,
         password,
         email,
@@ -78,7 +78,7 @@ const AuthSwitcher = () => {
 
   const handleLogIn = async () => {
     try {
-      const result = await axios.post('http://rasa-tts.com:5001/log-in', {
+      const result = await axios.post('http://localhost:5001/log-in', {
         username,
         password,
       }, { withCredentials: true });
@@ -96,7 +96,7 @@ const AuthSwitcher = () => {
 
 const fetchSessionInfo = async () => {
     try {
-      const response = await axios.get('http://rasa-tts.com:5001/session-info', { withCredentials: true });
+      const response = await axios.get('http://localhost:5001/session-info', { withCredentials: true });
       console.log('Информация о сессии:', response.data);
     } catch (error) {
       console.error('Не удалось получить информацию о сессии:', error);

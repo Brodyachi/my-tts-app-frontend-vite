@@ -8,6 +8,7 @@ const ChatModule = () => {
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState({ message: "", type: "" });
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [uploadedFile, setUploadedFile] = useState(null);
 
   useEffect(() => {
     fetchSessionInfo();
@@ -16,7 +17,7 @@ const ChatModule = () => {
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get("http://rasa-tts.com:5001/chat-history", { withCredentials: true });
+        const response = await axios.get("http://localhost:5001/chat-history", { withCredentials: true });
         setMessages(response.data);
       } catch (error) {
         console.error("Ошибка загрузки истории чата:", error);
@@ -28,7 +29,7 @@ const ChatModule = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await axios.get("http://rasa-tts.com:5001/session-info", { withCredentials: true });
+        const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
         if (!response.data.user) {
           window.location.href = "/auth";
         }
@@ -41,36 +42,89 @@ const ChatModule = () => {
 
   const fetchSessionInfo = async () => {
     try {
-      const response = await axios.get("http://rasa-tts.com:5001/session-info", { withCredentials: true });
+      const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
       console.log("Информация о сессии:", response.data);
     } catch (error) {
       console.error("Не удалось получить информацию о сессии:", error);
     }
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (!chatInput.trim()) {
-      setNotification({ message: "Введите текст.", type: "error" });
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const allowedTypes = ['text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      setNotification({ message: "Неподдерживаемый формат файла", type: "error" });
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setNotification({ message: "Файл слишком большой (максимум 10 МБ)", type: "error" });
       return;
     }
   
-    const newMessage = { text: chatInput, sender: "user" };
-    setMessages((prev) => [...prev, newMessage]);
-    setChatInput("");
-  
+    const formData = new FormData();
+    formData.append('document', file);
+    setUploadedFile(file);
+    setNotification({ message: "Файл загружен", type: "success" });
     try {
-      const result = await axios.post("http://rasa-tts.com:5001/api-request", {
-        text: chatInput,
-      }, { withCredentials: true });
+      const result = await axios.post("http://localhost:5001/upload-document", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      });
   
       const botReply = { text: result.data.request_url, sender: "bot" };
       setMessages((prev) => [...prev, botReply]);
-      console.log(botReply);
-      setNotification({
-        message: result.data.message,
-        type: result.data.success ? "success" : "error",
-      });
+      setNotification({ message: "Документ успешно обработан", type: "success" });
+    } catch (error) {
+      setNotification({ message: "Ошибка обработки документа", type: "error" });
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!chatInput.trim() && !uploadedFile) {
+      setNotification({ message: "Введите текст или загрузите файл.", type: "error" });
+      return;
+    }
+  
+    try {
+      let textToSend = chatInput;
+      if (uploadedFile) {
+        const formData = new FormData();
+        formData.append('document', uploadedFile);
+  
+        const fileResponse = await axios.post("http://localhost:5001/upload-document", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          withCredentials: true,
+        });
+        const botReply = { text: fileResponse.data.request_url, sender: "bot" };
+        setMessages((prev) => [...prev, botReply]);
+        setNotification({ message: "Документ успешно обработан", type: "success" });
+        setUploadedFile(null);
+        return;
+      }
+      if (chatInput.trim()) {
+        const newMessage = { text: chatInput, sender: "user" };
+        setMessages((prev) => [...prev, newMessage]);
+        setChatInput("");
+  
+        const result = await axios.post(
+          "http://localhost:5001/api-request",
+          { text: chatInput },
+          { withCredentials: true }
+        );
+  
+        const botReply = { text: result.data.request_url, sender: "bot" };
+        setMessages((prev) => [...prev, botReply]);
+        setNotification({
+          message: result.data.message,
+          type: result.data.success ? "success" : "error",
+        });
+      }
     } catch (error) {
       setNotification({ message: "Ошибка запроса", type: "error" });
     }
@@ -147,6 +201,12 @@ const ChatModule = () => {
               Отправить
             </button>
           </form>
+          <input
+            type="file"
+            accept=".txt, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf"
+            onChange={handleFileUpload}
+            className="mt-2"
+          />
           {notification.message && (
             <div
               className={`mt-2 text-sm ${
