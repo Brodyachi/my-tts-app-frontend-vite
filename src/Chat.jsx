@@ -90,7 +90,6 @@ const ChatModule = () => {
     }
   
     try {
-      let textToSend = chatInput;
       if (uploadedFile) {
         const formData = new FormData();
         formData.append('document', uploadedFile);
@@ -101,8 +100,8 @@ const ChatModule = () => {
           },
           withCredentials: true,
         });
-        const botReply = { text: fileResponse.data.request_url, sender: "bot" };
-        setMessages((prev) => [...prev, botReply]);
+        const userMessage = { text: uploadedFile.name, sender: "user", file: uploadedFile };
+        setMessages((prev) => [...prev, userMessage]);
         setNotification({ message: "Документ успешно обработан", type: "success" });
         setUploadedFile(null);
         return;
@@ -179,7 +178,7 @@ const ChatModule = () => {
                   <audio controls src={msg.text}></audio>
                 </>
               ) : (
-                msg.text
+                msg.file ? `Файл: ${msg.text}` : msg.text
               )}
               </div>
             </div>
