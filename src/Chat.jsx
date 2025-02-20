@@ -10,6 +10,14 @@ const ChatModule = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [uploadedFile, setUploadedFile] = useState(null);
 
+
+  const [ttsSettings, setTtsSettings] = useState({
+    voice: "oksana",
+    emotion: "neutral",
+    speed: 1.0,
+    format: "oggopus",
+  });
+
   useEffect(() => {
     fetchSessionInfo();
   }, []);
@@ -110,10 +118,12 @@ const ChatModule = () => {
         const newMessage = { text: chatInput, sender: "user" };
         setMessages((prev) => [...prev, newMessage]);
         setChatInput("");
-  
         const result = await axios.post(
           "http://localhost:5001/api-request",
-          { text: chatInput },
+          { 
+            text: chatInput,
+            ttsSettings: ttsSettings
+          },
           { withCredentials: true }
         );
   
@@ -128,7 +138,13 @@ const ChatModule = () => {
       setNotification({ message: "Ошибка запроса", type: "error" });
     }
   };
-  
+
+  const handleTtsSettingChange = (setting, value) => {
+    setTtsSettings((prev) => ({
+      ...prev,
+      [setting]: value,
+    }));
+  };
 
   return (
     <div className="flex w-screen h-screen bg-gray-100 overflow-hidden">
@@ -139,12 +155,53 @@ const ChatModule = () => {
             animate={{ x: 0 }}
             exit={{ x: -300 }}
             transition={{ duration: 0.3 }}
-            className="bg-gray-800 text-black w-64 p-4 shadow-lg h-full"
+            className="bg-gray-800 text-white w-64 p-4 shadow-lg h-full"
           >
             <button className="w-full text-black p-2 mb-4 hover:bg-gray-700 rounded">
               Профиль
             </button>
             <div className="bg-gray-700 p-4 h-full shadow-inner rounded">
+              <label className="w-full text-white p-2 mb-4">Настройки синтеза</label><br></br>
+              <label className="w-full text-white p-2 mb-4">Голос</label><br></br>
+              <select 
+                className="w-full bg-gray-600 text-white p-2 mb-4 rounded"
+                value={ttsSettings.voice}
+                onChange={(e) => handleTtsSettingChange("voice", e.target.value)}
+              >
+                <option value="oksana">Оксана</option>
+                <option value="jane">Джейн</option>
+                <option value="ermil">Ермил</option>
+                <option value="zahar">Захар</option>
+              </select>
+              <label className="w-full text-white p-2 mb-4">Эмоция</label><br></br>
+              <select 
+                className="w-full bg-gray-600 text-white p-2 mb-4 rounded"
+                value={ttsSettings.emotion}
+                onChange={(e) => handleTtsSettingChange("emotion", e.target.value)}
+              >
+                <option value="neutral">Нейтральная</option>
+                <option value="good">Радость</option>
+                <option value="evil">Злость</option>
+              </select>
+              <label className="w-full text-white p-2 mb-4">Скорость</label><br></br>
+              <input
+                type="range"
+                min="0.1"
+                max="3.0"
+                step="0.1"
+                value={ttsSettings.speed}
+                onChange={(e) => handleTtsSettingChange("speed", parseFloat(e.target.value))}
+                className="w-full bg-gray-600 rounded"
+              />
+              <span className="text-white">{ttsSettings.speed}</span>
+              <label className="w-full text-white p-2 mb-4">Формат</label><br></br>
+              <select 
+                className="w-full bg-gray-600 text-white p-2 mb-4 rounded"
+                value={ttsSettings.format}
+                onChange={(e) => handleTtsSettingChange("format", e.target.value)}
+              >
+                <option value="oggopus">OGG Opus</option>
+              </select>
             </div>
           </motion.div>
         )}
