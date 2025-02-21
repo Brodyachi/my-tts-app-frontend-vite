@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import { Sun, Moon, Menu, X, Upload, Send } from "react-feather";
 import "./App.css";
 
 const ChatModule = () => {
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState({ message: "", type: "" });
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
-
+  const [theme, setTheme] = useState("light");
 
   const [ttsSettings, setTtsSettings] = useState({
     voice: "oksana",
@@ -17,35 +18,9 @@ const ChatModule = () => {
     speed: 1.0,
     format: "oggopus",
   });
-
   useEffect(() => {
     fetchSessionInfo();
-  }, []);
-
-  useEffect(() => {
-    const fetchChatHistory = async () => {
-      try {
-        const response = await axios.get("http://localhost:5001/chat-history", { withCredentials: true });
-        setMessages(response.data);
-      } catch (error) {
-        console.error("Ошибка загрузки истории чата:", error);
-      }
-    };
     fetchChatHistory();
-  }, []);
-
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
-        if (!response.data.user) {
-          window.location.href = "/auth";
-        }
-      } catch (error) {
-        window.location.href = "/auth";
-      }
-    };
-    checkSession();
   }, []);
 
   const fetchSessionInfo = async () => {
@@ -54,6 +29,15 @@ const ChatModule = () => {
       console.log("Информация о сессии:", response.data);
     } catch (error) {
       console.error("Не удалось получить информацию о сессии:", error);
+    }
+  };
+
+  const fetchChatHistory = async () => {
+    try {
+      const response = await axios.get("http://localhost:5001/chat-history", { withCredentials: true });
+      setMessages(response.data);
+    } catch (error) {
+      console.error("Ошибка загрузки истории чата:", error);
     }
   };
 
@@ -69,7 +53,7 @@ const ChatModule = () => {
       setNotification({ message: "Файл слишком большой (максимум 10 МБ)", type: "error" });
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('document', file);
     setUploadedFile(file);
@@ -81,7 +65,7 @@ const ChatModule = () => {
         },
         withCredentials: true,
       });
-  
+
       const botReply = { text: result.data.request_url, sender: "bot" };
       setMessages((prev) => [...prev, botReply]);
       setNotification({ message: "Документ успешно обработан", type: "success" });
@@ -96,12 +80,12 @@ const ChatModule = () => {
       setNotification({ message: "Введите текст или загрузите файл.", type: "error" });
       return;
     }
-  
+
     try {
       if (uploadedFile) {
         const formData = new FormData();
         formData.append('document', uploadedFile);
-  
+
         const fileResponse = await axios.post("http://localhost:5001/upload-document", formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -126,7 +110,7 @@ const ChatModule = () => {
           },
           { withCredentials: true }
         );
-  
+
         const botReply = { text: result.data.request_url, sender: "bot" };
         setMessages((prev) => [...prev, botReply]);
         setNotification({
@@ -146,8 +130,12 @@ const ChatModule = () => {
     }));
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
   return (
-    <div className="flex w-screen h-screen bg-gray-100 overflow-hidden">
+    <div className={`flex w-screen h-screen ${theme === "light" ? "bg-gray-50" : "bg-gray-900"} transition-colors duration-300`}>
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
@@ -155,67 +143,78 @@ const ChatModule = () => {
             animate={{ x: 0 }}
             exit={{ x: -300 }}
             transition={{ duration: 0.3 }}
-            className="bg-gray-800 text-white w-64 p-4 shadow-lg h-full"
+            className={`${theme === "light" ? "bg-white" : "bg-gray-800"} w-64 p-4 shadow-lg h-full fixed z-10`}
           >
-            <button className="w-full text-black p-2 mb-4 hover:bg-gray-700 rounded">
-              Профиль
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className={`${theme === "light" ? "text-gray-800" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+            >
+              <X size={20} />
             </button>
-            <div className="bg-gray-700 p-4 h-full shadow-inner rounded">
-              <label className="w-full text-white p-2 mb-4">Настройки синтеза</label><br></br>
-              <label className="w-full text-white p-2 mb-4">Голос</label><br></br>
-              <select 
-                className="w-full bg-gray-600 text-white p-2 mb-4 rounded"
-                value={ttsSettings.voice}
-                onChange={(e) => handleTtsSettingChange("voice", e.target.value)}
-              >
-                <option value="oksana">Оксана</option>
-                <option value="jane">Джейн</option>
-                <option value="ermil">Ермил</option>
-                <option value="zahar">Захар</option>
-              </select>
-              <label className="w-full text-white p-2 mb-4">Эмоция</label><br></br>
-              <select 
-                className="w-full bg-gray-600 text-white p-2 mb-4 rounded"
-                value={ttsSettings.emotion}
-                onChange={(e) => handleTtsSettingChange("emotion", e.target.value)}
-              >
-                <option value="neutral">Нейтральная</option>
-                <option value="good">Радость</option>
-                <option value="evil">Злость</option>
-              </select>
-              <label className="w-full text-white p-2 mb-4">Скорость</label><br></br>
-              <input
-                type="range"
-                min="0.1"
-                max="3.0"
-                step="0.1"
-                value={ttsSettings.speed}
-                onChange={(e) => handleTtsSettingChange("speed", parseFloat(e.target.value))}
-                className="w-full bg-gray-600 rounded"
-              />
-              <span className="text-white">{ttsSettings.speed}</span>
-              <label className="w-full text-white p-2 mb-4">Формат</label><br></br>
-              <select 
-                className="w-full bg-gray-600 text-white p-2 mb-4 rounded"
-                value={ttsSettings.format}
-                onChange={(e) => handleTtsSettingChange("format", e.target.value)}
-              >
-                <option value="oggopus">OGG Opus</option>
-              </select>
+            <div className="mt-4">
+              <h2 className={`${theme === "light" ? "text-gray-800" : "text-white"} text-lg font-semibold mb-4`}>Настройки синтеза</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm`}>Голос</label>
+                  <select
+                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-white"} p-2 rounded mt-1`}
+                    value={ttsSettings.voice}
+                    onChange={(e) => handleTtsSettingChange("voice", e.target.value)}
+                  >
+                    <option value="oksana">Оксана</option>
+                    <option value="jane">Джейн</option>
+                    <option value="ermil">Ермил</option>
+                    <option value="zahar">Захар</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm`}>Эмоция</label>
+                  <select
+                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-white"} p-2 rounded mt-1`}
+                    value={ttsSettings.emotion}
+                    onChange={(e) => handleTtsSettingChange("emotion", e.target.value)}
+                  >
+                    <option value="neutral">Нейтральная</option>
+                    <option value="good">Радость</option>
+                    <option value="evil">Злость</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm`}>Скорость</label>
+                  <input
+                    type="range"
+                    min="0.1"
+                    max="3.0"
+                    step="0.1"
+                    value={ttsSettings.speed}
+                    onChange={(e) => handleTtsSettingChange("speed", parseFloat(e.target.value))}
+                    className={`w-full ${theme === "light" ? "bg-gray-100" : "bg-gray-700"} rounded mt-1`}
+                  />
+                  <span className={`${theme === "light" ? "text-gray-800" : "text-white"} text-sm`}>{ttsSettings.speed}</span>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="bg-gray-800 text-black p-4 shadow-lg">
+        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 shadow-md flex items-center justify-between`}>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="text-black hover:bg-gray-700 p-2 rounded"
+            className={`${theme === "light" ? "text-gray-800" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
           >
-            {isSidebarOpen ? "◀" : "▶"}
+            <Menu size={24} />
+          </button>
+          <button
+            onClick={toggleTheme}
+            className={`${theme === "light" ? "text-gray-800" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+          >
+            {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
           </button>
         </div>
-        <div className="flex-1 p-4 overflow-auto bg-gray-50">
+
+        <div className={`flex-1 p-4 overflow-auto ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`}>
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -226,43 +225,48 @@ const ChatModule = () => {
               <div
                 className={`inline-block p-3 rounded-lg ${
                   msg.sender === "user"
-                    ? "bg-blue-500 text-black"
-                    : "bg-gray-200 text-gray-800"
+                    ? `${theme === "light" ? "bg-blue-500 text-white" : "bg-blue-600 text-black"}`
+                    : `${theme === "light" ? "bg-gray-200 text-gray-800" : "bg-gray-700 text-gray-200"}`
                 }`}
               >
-              {msg.sender === "bot" ? (
-                <>
-                  <audio controls src={msg.text}></audio>
-                </>
-              ) : (
-                msg.file ? `Файл: ${msg.text}` : msg.text
-              )}
+                {msg.sender === "bot" ? (
+                  <>
+                    <audio controls src={msg.text}></audio>
+                  </>
+                ) : (
+                  msg.file ? `Файл: ${msg.text}` : msg.text
+                )}
               </div>
             </div>
           ))}
         </div>
-        <div className="bg-white p-4 border-t">
-          <form onSubmit={onSubmit} className="flex">
+
+        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 border-t ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}>
+          <form onSubmit={onSubmit} className="flex gap-2">
             <input
               type="text"
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               placeholder="Введите сообщение..."
-              className="flex-1 p-2 border rounded-l"
+              className={`flex-1 p-2 ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-black"} rounded-lg focus:outline-none`}
             />
             <button
               type="submit"
-              className="bg-blue-500 text-black p-2 rounded-r hover:bg-blue-600"
+              className={`${theme === "light" ? "bg-blue-500 text-black" : "bg-blue-600 text-black"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
             >
-              Отправить
+              <Send size={20} />
             </button>
           </form>
-          <input
-            type="file"
-            accept=".txt, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf"
-            onChange={handleFileUpload}
-            className="mt-2"
-          />
+          <label className={`${theme === "light" ? "text-gray-800" : "text-black"} mt-2 flex items-center gap-2 cursor-pointer`}>
+            <Upload size={20} />
+            <input
+              type="file"
+              accept=".txt, .docx, .pdf"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            Загрузить файл
+          </label>
           {notification.message && (
             <div
               className={`mt-2 text-sm ${
