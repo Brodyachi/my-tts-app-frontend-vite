@@ -132,8 +132,8 @@ const AuthSwitcher = () => {
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="text-red-500 text-sm">{errors.email?.message}</p>
-                <button type="submit" className="w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors">
-                  Отправить
+                <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors">
+                  Отправить запрос
                 </button>
                 <button
                   type="button"
@@ -180,7 +180,7 @@ const AuthSwitcher = () => {
                     <button
                       type="button"
                       onClick={handleSendCode}
-                      className="w-full bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600 transition-colors"
+                      className="w-full bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition-colors"
                     >
                       Отправить код на почту
                     </button>
@@ -198,7 +198,7 @@ const AuthSwitcher = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors"
+                  className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors"
                 >
                   {isLogin ? 'Войти' : 'Зарегистрироваться'}
                 </button>

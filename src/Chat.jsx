@@ -147,7 +147,7 @@ const ChatModule = () => {
           >
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className={`${theme === "light" ? "text-gray-800" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+              className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
             >
               <X size={20} />
             </button>
@@ -167,18 +167,7 @@ const ChatModule = () => {
                     <option value="zahar">Захар</option>
                   </select>
                 </div>
-                <div>
-                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm`}>Эмоция</label>
-                  <select
-                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-white"} p-2 rounded mt-1`}
-                    value={ttsSettings.emotion}
-                    onChange={(e) => handleTtsSettingChange("emotion", e.target.value)}
-                  >
-                    <option value="neutral">Нейтральная</option>
-                    <option value="good">Радость</option>
-                    <option value="evil">Злость</option>
-                  </select>
-                </div>
+                
                 <div>
                   <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm`}>Скорость</label>
                   <input
@@ -202,13 +191,13 @@ const ChatModule = () => {
         <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 shadow-md flex items-center justify-between`}>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className={`${theme === "light" ? "text-gray-800" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
           >
             <Menu size={24} />
           </button>
           <button
             onClick={toggleTheme}
-            className={`${theme === "light" ? "text-gray-800" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
           >
             {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
           </button>
@@ -252,12 +241,12 @@ const ChatModule = () => {
             />
             <button
               type="submit"
-              className={`${theme === "light" ? "bg-blue-500 text-black" : "bg-blue-600 text-black"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
+              className={`${theme === "light" ? "bg-blue-500 text-white" : "bg-blue-600 text-white"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
             >
               <Send size={20} />
             </button>
           </form>
-          <label className={`${theme === "light" ? "text-gray-800" : "text-black"} mt-2 flex items-center gap-2 cursor-pointer`}>
+          <label className={`${theme === "light" ? "text-gray-800" : "text-white"} mt-2 flex items-center gap-2 cursor-pointer`}>
             <Upload size={20} />
             <input
               type="file"
