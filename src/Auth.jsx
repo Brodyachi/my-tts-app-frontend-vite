@@ -60,6 +60,33 @@ const AuthSwitcher = () => {
     setNotification({ message: result.message, type: result.success ? 'success' : 'error' });
   };
 
+  const handleLogIn = async () => {
+    try {
+      const result = await axios.post('http://localhost:5001/log-in', {
+        username,
+        password,
+      }, { withCredentials: true });
+  
+      if (result.data.success) {
+        setNotification({ message: result.data.message, type: 'success' });
+        window.location.href = "/chat";
+      } else {
+        setNotification({ message: result.data.message, type: 'error' });
+      }
+    } catch (error) {
+      setNotification({ message: 'Ошибка входа. Попробуйте снова.', type: 'error' });
+    }
+  };
+  
+  const handlePasswordReset = async () => {
+    try {
+      const result = await axios.post('http://localhost:5001/password-reset', { email });
+      setNotification({ message: result.data.message, type: result.data.success ? 'success' : 'error' });
+    } catch (error) {
+      setNotification({ message: 'Ошибка сброса пароля. Попробуйте снова.', type: 'error' });
+    }
+  };
+  
   const handleRegistrate = async () => {
     try {
       const result = await axios.post('http://localhost:5001/verify-code', {
@@ -69,40 +96,18 @@ const AuthSwitcher = () => {
         code: codeIn,
       });
       setNotification({ message: result.data.message, type: result.data.success ? 'success' : 'error' });
+  
+      if (result.data.success) {
+        setIsLogin(true);
+      }
     } catch (error) {
       setNotification({ message: 'Ошибка регистрации. Попробуйте снова.', type: 'error' });
     }
   };
 
-  const handleLogIn = async () => {
-    try {
-      const result = await axios.post('http://localhost:5001/log-in', {
-        username,
-        password,
-      }, { withCredentials: true });
-
-      if (result.data.success) {
-        setNotification({ message: result.data.message, type: 'success' });
-      } else {
-        setNotification({ message: result.data.message, type: 'error' });
-      }
-    } catch (error) {
-      setNotification({ message: 'Ошибка входа. Попробуйте снова.', type: 'error' });
-    }
-  };
-
-  const handlePasswordReset = async () => {
-    try {
-      const result = await axios.post('http://localhost:5001/reset-password', { email });
-      setNotification({ message: result.data.message, type: result.data.success ? 'success' : 'error' });
-    } catch (error) {
-      setNotification({ message: 'Ошибка сброса пароля. Попробуйте снова.', type: 'error' });
-    }
-  };
-
   return (
     <div className={`min-h-screen min-w-screen flex flex-col ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
-      {/* Кнопка смены темы */}
+
       <button
         onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
         className="fixed top-4 right-4 p-2 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition-colors"
@@ -110,7 +115,6 @@ const AuthSwitcher = () => {
         {theme === 'light' ? '🌙' : '☀️'}
       </button>
 
-      {/* Основной контент */}
       <div className="flex flex-1 items-center justify-center p-8">
         <div className={`w-full max-w-md p-8 rounded-lg shadow-2xl transition-all ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
           {notification.message && (
@@ -132,7 +136,7 @@ const AuthSwitcher = () => {
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="text-red-500 text-sm">{errors.email?.message}</p>
-                <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors">
+                <button type="button" onClick={handlePasswordReset} className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors">
                   Отправить запрос
                 </button>
                 <button
