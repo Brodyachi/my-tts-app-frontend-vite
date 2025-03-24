@@ -86,7 +86,7 @@ const ChatModule = () => {
         const formData = new FormData();
         formData.append('document', uploadedFile);
 
-        const fileResponse = await axios.post("http://localhost:5001/upload-document", formData, {
+        const fileResponse = await axios.post("http://localhost:5001/upload-document", formData,  {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -135,7 +135,7 @@ const ChatModule = () => {
   };
 
   return (
-    <div className={`flex w-screen h-screen ${theme === "light" ? "bg-gray-50" : "bg-gray-900"} transition-colors duration-300`}>
+    <div className={`flex w-screen h-screen ${theme === "light" ? "bg-gray-50" : "bg-gray-900"} transition-all duration-300`}>
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
@@ -143,21 +143,21 @@ const ChatModule = () => {
             animate={{ x: 0 }}
             exit={{ x: -300 }}
             transition={{ duration: 0.3 }}
-            className={`${theme === "light" ? "bg-white" : "bg-gray-800"} w-64 p-4 shadow-lg h-full fixed z-10`}
+            className={`${theme === "light" ? "bg-white" : "bg-gray-800"} w-64 p-4 shadow-lg h-full fixed z-10 `}
           >
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+              className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full  duration-300`}
             >
               <X size={20} />
             </button>
             <div className="mt-4">
-              <h2 className={`${theme === "light" ? "text-gray-800" : "text-white"} text-lg font-semibold mb-4`}>Настройки синтеза</h2>
+              <h2 className={`${theme === "light" ? "text-gray-800" : "text-white"} text-lg font-semibold mb-4 `}>Настройки синтеза</h2>
               <div className="space-y-4">
                 <div>
-                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm`}>Голос</label>
+                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm `}>Голос</label>
                   <select
-                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-white"} p-2 rounded mt-1`}
+                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-white "} p-2 rounded mt-1`}
                     value={ttsSettings.voice}
                     onChange={(e) => handleTtsSettingChange("voice", e.target.value)}
                   >
@@ -169,7 +169,7 @@ const ChatModule = () => {
                 </div>
                 
                 <div>
-                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm`}>Скорость</label>
+                  <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm `}>Скорость</label>
                   <input
                     type="range"
                     min="0.1"
@@ -177,9 +177,9 @@ const ChatModule = () => {
                     step="0.1"
                     value={ttsSettings.speed}
                     onChange={(e) => handleTtsSettingChange("speed", parseFloat(e.target.value))}
-                    className={`w-full ${theme === "light" ? "bg-gray-100" : "bg-gray-700"} rounded mt-1`}
+                    className={`w-full ${theme === "light" ? "bg-gray-100" : "bg-gray-700"} rounded mt-1 `}
                   />
-                  <span className={`${theme === "light" ? "text-gray-800" : "text-white"} text-sm`}>{ttsSettings.speed}</span>
+                  <span className={`${theme === "light" ? "text-gray-800" : "text-white"} text-sm `}>{ttsSettings.speed}</span>
                 </div>
               </div>
             </div>
@@ -188,22 +188,22 @@ const ChatModule = () => {
       </AnimatePresence>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 shadow-md flex items-center justify-between`}>
+        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 shadow-md flex items-center justify-between transition-all`}>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             <Menu size={24} />
           </button>
           <button
             onClick={toggleTheme}
-            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-colors duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
           </button>
         </div>
 
-        <div className={`flex-1 p-4 overflow-auto ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`}>
+        <div className={`flex-1 p-4 overflow-auto transition-all ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`}>
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -212,7 +212,7 @@ const ChatModule = () => {
               }`}
             >
               <div
-                className={`inline-block p-3 rounded-lg ${
+                className={`inline-block p-3 rounded-lg transition-all ${
                   msg.sender === "user"
                     ? `${theme === "light" ? "bg-blue-500 text-white" : "bg-blue-600 text-black"}`
                     : `${theme === "light" ? "bg-gray-200 text-gray-800" : "bg-gray-700 text-gray-200"}`
@@ -230,7 +230,7 @@ const ChatModule = () => {
           ))}
         </div>
 
-        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 border-t ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}>
+        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 transition-all border-t ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}>
           <form onSubmit={onSubmit} className="flex gap-2">
             <input
               type="text"
