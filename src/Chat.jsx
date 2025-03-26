@@ -44,28 +44,40 @@ const ChatModule = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const allowedTypes = ['text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf'];
+  
+    const allowedTypes = [
+      "text/plain",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/pdf",
+    ];
+  
     if (!allowedTypes.includes(file.type)) {
       setNotification({ message: "Неподдерживаемый формат файла", type: "error" });
       return;
     }
+  
     if (file.size > 10 * 1024 * 1024) {
       setNotification({ message: "Файл слишком большой (максимум 10 МБ)", type: "error" });
       return;
     }
-
+  
     const formData = new FormData();
-    formData.append('document', file);
+    formData.append("document", file);
+    formData.append("ttsSettings", JSON.stringify(ttsSettings));
     setUploadedFile(file);
     setNotification({ message: "Файл загружен", type: "success" });
+  
     try {
-      const result = await axios.post("http://localhost:5001/upload-document", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
-
+      const result = await axios.post(
+        "http://localhost:5001/upload-document",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
+      const userMessage = { text: "Файл", sender: "user"};
+      setMessages((prev) => [...prev, userMessage]);
       const botReply = { text: result.data.request_url, sender: "bot" };
       setMessages((prev) => [...prev, botReply]);
       setNotification({ message: "Документ успешно обработан", type: "success" });
@@ -73,44 +85,25 @@ const ChatModule = () => {
       setNotification({ message: "Ошибка обработки документа", type: "error" });
     }
   };
-
+  
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!chatInput.trim() && !uploadedFile) {
+    if (!chatInput.trim()) {
       setNotification({ message: "Введите текст или загрузите файл.", type: "error" });
       return;
     }
-
-    try {
-      if (uploadedFile) {
-        const formData = new FormData();
-        formData.append('document', uploadedFile);
-
-        const fileResponse = await axios.post("http://localhost:5001/upload-document", formData,  {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          withCredentials: true,
-        });
-        const userMessage = { text: uploadedFile.name, sender: "user", file: uploadedFile };
-        setMessages((prev) => [...prev, userMessage]);
-        setNotification({ message: "Документ успешно обработан", type: "success" });
-        setUploadedFile(null);
-        return;
-      }
+    try { 
       if (chatInput.trim()) {
         const newMessage = { text: chatInput, sender: "user" };
         setMessages((prev) => [...prev, newMessage]);
         setChatInput("");
+  
         const result = await axios.post(
           "http://localhost:5001/api-request",
-          { 
-            text: chatInput,
-            ttsSettings: ttsSettings
-          },
+          { text: chatInput, ttsSettings },
           { withCredentials: true }
         );
-
+  
         const botReply = { text: result.data.request_url, sender: "bot" };
         setMessages((prev) => [...prev, botReply]);
         setNotification({
@@ -122,7 +115,7 @@ const ChatModule = () => {
       setNotification({ message: "Ошибка запроса", type: "error" });
     }
   };
-
+  
   const handleTtsSettingChange = (setting, value) => {
     setTtsSettings((prev) => ({
       ...prev,
