@@ -44,7 +44,7 @@ const ChatModule = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-  
+    e.target.value = null;
     const allowedTypes = [
       "text/plain",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -66,7 +66,7 @@ const ChatModule = () => {
     formData.append("ttsSettings", JSON.stringify(ttsSettings));
     setUploadedFile(file);
     setNotification({ message: "Файл загружен", type: "success" });
-  
+    console.log("bebra1")
     try {
       const result = await axios.post(
         "http://localhost:5001/upload-document",
@@ -79,6 +79,7 @@ const ChatModule = () => {
       const userMessage = { text: "Файл", sender: "user"};
       setMessages((prev) => [...prev, userMessage]);
       const botReply = { text: result.data.request_url, sender: "bot" };
+      console.log("bebra2")
       setMessages((prev) => [...prev, botReply]);
       setNotification({ message: "Документ успешно обработан", type: "success" });
     } catch (error) {
