@@ -128,6 +128,11 @@ const ChatModule = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
+  const toggleMenu = (e) => {
+    window.location.href = e.target.value;
+  };
+
+
   return (
     <div className={`flex w-screen h-screen ${theme === "light" ? "bg-gray-50" : "bg-gray-900"} transition-all duration-300`}>
       <AnimatePresence>
@@ -146,7 +151,30 @@ const ChatModule = () => {
               <X size={20} />
             </button>
             <div className="mt-4">
-              <h2 className={`${theme === "light" ? "text-gray-800" : "text-white"} text-lg font-semibold mb-4 `}>Настройки синтеза</h2>
+              <h2 className={`${theme === "light" ? "text-gray-800" : "text-white"} text-lg font-semibold mb-4 `}>Чат</h2>
+              <div className="space-y-4">
+              <button
+                  value="chat"
+                  onClick={toggleMenu}
+                  className={`${theme === "light" ? "text-white hover:bg-gray-100" : "text-white hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
+                >
+                  Чат
+                </button>
+                <button
+                  value="profile"
+                  onClick={toggleMenu}
+                  className={`${theme === "light" ? "bg-blue-100 text-white" : "bg-blue-900 text-white"} p-2 rounded-lg w-full text-left duration-300`}
+                >
+                  Профиль
+                </button>
+                <button
+                  value="edit"
+                  onClick={toggleMenu}
+                  className={`${theme === "light" ? "text-white hover:bg-gray-100" : "text-white hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
+                >
+                  Редактор запросов
+                </button>
+              </div>
               <div className="space-y-4">
                 <div>
                   <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm `}>Голос</label>
