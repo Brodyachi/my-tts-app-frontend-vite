@@ -3,8 +3,10 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X, Upload, Send } from "react-feather";
 import "./App.css";
+import { useNavigate } from "react-router-dom";
 
 const ChatModule = () => {
+  const navigate = useNavigate();
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState({ message: "", type: "" });
@@ -129,7 +131,7 @@ const ChatModule = () => {
   };
 
   const toggleMenu = (e) => {
-    window.location.href = e.target.value;
+    navigate(`/${e.target.value}`, { replace: true });
   };
 
 

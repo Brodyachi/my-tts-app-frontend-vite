@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X, Key, User, Mail } from "react-feather";
 import "./App.css";
-
+import { useNavigate } from "react-router-dom";
 const ProfileModule = () => {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState("light");
   const [userData, setUserData] = useState(null);
@@ -15,15 +16,48 @@ const ProfileModule = () => {
   });
   const [message, setMessage] = useState({ text: "", type: "" });
 
+  const PasswordStrengthIndicator = ({ password }) => {
+    if (!password) return null;
+    
+    const { isValid, errors } = validatePassword(password);
+    const strength = 5 - errors.length;
+    
+    return (
+      <div className="mt-2">
+        <div className="flex items-center">
+          <div className="flex-1 flex space-x-1">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div 
+                key={i}
+                className={`h-1 flex-1 rounded-sm ${
+                  i <= strength 
+                    ? strength < 3 ? 'bg-red-500' : strength < 5 ? 'bg-yellow-500' : 'bg-green-500'
+                    : 'bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+        {errors.length > 0 && (
+          <ul className="mt-1 text-xs text-red-500 list-disc list-inside">
+            {errors.map((error, i) => (
+              <li key={i}>{error}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  };
+
   useEffect(() => {
     fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get('/profile', { withCredentials: true });
-      if (response.data.userId) {
-        const userResponse = await axios.get(`/user/${response.data.userId}`, { withCredentials: true });
+      const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
+      if (response.data.user) {
+        const userResponse = await axios.get(`http://localhost:5001/user/${response.data.user}`, { withCredentials: true });
         setUserData(userResponse.data);
       }
     } catch (error) {
@@ -33,14 +67,23 @@ const ProfileModule = () => {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    
+
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       setMessage({ text: "Новые пароли не совпадают", type: "error" });
       return;
     }
+
+    const { isValid, errors } = validatePassword(passwordForm.newPassword);
+    if (!isValid) {
+      setMessage({ 
+        text: `Пароль не соответствует требованиям: ${errors.join(', ')}`, 
+        type: "error" 
+      });
+      return;
+    }
   
     try {
-      const response = await axios.post('/change-password', {
+      const response = await axios.post('http://localhost:5001/changepassword', {
         oldPassword: passwordForm.oldPassword,
         newPassword: passwordForm.newPassword
       }, { withCredentials: true });
@@ -65,12 +108,36 @@ const ProfileModule = () => {
     }
   };
 
+  const validatePassword = (password) => {
+    const minLength = 6;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
+    return {
+      isValid: password.length >= minLength && 
+               hasUpperCase && 
+               hasLowerCase && 
+               hasNumbers && 
+               hasSpecialChars,
+      errors: [
+        password.length >= minLength ? null : `Пароль должен содержать минимум ${minLength} символов`,
+        hasUpperCase ? null : 'Пароль должен содержать хотя бы одну заглавную букву',
+        hasLowerCase ? null : 'Пароль должен содержать хотя бы одну строчную букву',
+        hasNumbers ? null : 'Пароль должен содержать хотя бы одну цифру',
+        hasSpecialChars ? null : 'Пароль должен содержать хотя бы один специальный символ (!@#$%^&* и т.д.)'
+      ].filter(Boolean)
+    };
+  };
+
+
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
   const toggleMenu = (e) => {
-    window.location.href = e.target.value;
+    navigate(`/${e.target.value}`, { replace: true });
   };
 
   const handleInputChange = (e) => {
@@ -164,12 +231,6 @@ const ProfileModule = () => {
                   <Mail className={`mr-3 ${theme === "light" ? "text-gray-600" : "text-gray-300"}`} size={18} />
                   <span className={`${theme === "light" ? "text-gray-800" : "text-white"}`}>{userData.email}</span>
                 </div>
-                
-                <div className={`mt-6 pt-6 border-t ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}>
-                  <p className={`text-sm ${theme === "light" ? "text-gray-500" : "text-gray-400"}`}>
-                    Зарегистрирован: {new Date(userData.created_at).toLocaleDateString()}
-                  </p>
-                </div>
               </div>
             )}
             
@@ -198,7 +259,7 @@ const ProfileModule = () => {
                     name="oldPassword"
                     value={passwordForm.oldPassword}
                     onChange={handleInputChange}
-                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300" : "bg-gray-700 border-gray-600 text-white"}`}
+                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300 text-black" : "bg-gray-700 border-gray-600 text-white"}`}
                     required
                   />
                 </div>
@@ -208,7 +269,6 @@ const ProfileModule = () => {
                     Новый пароль
                   </label>
                   <input
-                    type="password"
                     id="newPassword"
                     name="newPassword"
                     value={passwordForm.newPassword}
@@ -217,13 +277,12 @@ const ProfileModule = () => {
                     required
                   />
                 </div>
-                
+                <PasswordStrengthIndicator password={passwordForm.newPassword} />
                 <div className="mb-6">
                   <label className={`block mb-2 ${theme === "light" ? "text-gray-700" : "text-gray-300"}`} htmlFor="confirmPassword">
                     Подтвердите новый пароль
                   </label>
                   <input
-                    type="password"
                     id="confirmPassword"
                     name="confirmPassword"
                     value={passwordForm.confirmPassword}

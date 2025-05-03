@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const loginSchema = yup.object().shape({
   username: yup.string().required('Логин обязателен'),
@@ -26,6 +27,7 @@ const sendCodeToEmail = async (email) => {
 };
 
 const AuthSwitcher = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -34,6 +36,7 @@ const AuthSwitcher = () => {
   const [codeIn, setCodeIn] = useState("");
   const [notification, setNotification] = useState({ message: '', type: '' });
   const [theme, setTheme] = useState('light');
+  const [isLoading, setIsLoading] = useState(false);
   const schema = isLogin ? loginSchema : registerSchema;
 
   const { register, handleSubmit, formState: { errors }} = useForm({
@@ -45,7 +48,6 @@ const AuthSwitcher = () => {
       await handlePasswordReset();
     } else if (isLogin) {
       await handleLogIn();
-      window.location.href = "/chat";
     } else {
       await handleRegistrate();
     }
@@ -61,20 +63,45 @@ const AuthSwitcher = () => {
   };
 
   const handleLogIn = async () => {
+    setIsLoading(true);
+    setNotification({ message: '', type: '' });
     try {
-      const result = await axios.post('http://localhost:5001/log-in', {
+      const response = await axios.post('http://localhost:5001/log-in', {
         username,
         password,
-      }, { withCredentials: true });
-  
-      if (result.data.success) {
-        setNotification({ message: result.data.message, type: 'success' });
-        window.location.href = "/chat";
+      }, { 
+        withCredentials: true,
+        validateStatus: (status) => status < 500
+      });
+
+      if (response.status === 200) {
+        setNotification({ message: response.data.message, type: 'success' });
+        setTimeout(() => navigate('/chat'), 1000);
       } else {
-        setNotification({ message: result.data.message, type: 'error' });
+        setNotification({ 
+          message: response.data.message || 'Неверные учетные данные', 
+          type: 'error' 
+        });
       }
     } catch (error) {
-      setNotification({ message: 'Ошибка входа. Попробуйте снова.', type: 'error' });
+      if (error.response) {
+        setNotification({ 
+          message: error.response.data.message || 'Ошибка входа', 
+          type: 'error' 
+        });
+      } else if (error.request) {
+        setNotification({ 
+          message: 'Сервер не отвечает. Попробуйте позже.', 
+          type: 'error' 
+        });
+      } else {
+        setNotification({ 
+          message: 'Ошибка при отправке запроса', 
+          type: 'error' 
+        });
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -202,9 +229,10 @@ const AuthSwitcher = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors"
+                  disabled={isLoading}
+                  className={`w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  {isLogin ? 'Войти' : 'Зарегистрироваться'}
+                  {isLoading ? 'Загрузка...' : isLogin ? 'Войти' : 'Зарегистрироваться'}
                 </button>
 
                 <p
