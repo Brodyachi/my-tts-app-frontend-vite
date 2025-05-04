@@ -148,6 +148,24 @@ const ProfileModule = () => {
     }));
   };
 
+  const Logout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/log-out", 
+        {},
+        { withCredentials: true }
+      );
+      
+      if (response.data.logout) {
+        setTimeout(() => {
+          window.location.href = '/auth';
+        }, 1500);
+      }
+    } catch (error) {
+      console.error("Ошибка выхода", error);
+    }
+  }
+
   return (
     <div className={`flex w-screen h-screen ${theme === "light" ? "bg-gray-50" : "bg-gray-900"} transition-all duration-300`}>
       <AnimatePresence>
@@ -231,6 +249,14 @@ const ProfileModule = () => {
                   <Mail className={`mr-3 ${theme === "light" ? "text-gray-600" : "text-gray-300"}`} size={18} />
                   <span className={`${theme === "light" ? "text-gray-800" : "text-white"}`}>{userData.email}</span>
                 </div>
+                <button
+                  type="button"
+                  onClick={()=>Logout()}
+                  className={`w-full py-3 px-4 rounded font-medium ${theme === "light" ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-blue-700 text-white hover:bg-blue-800"} transition-colors`}
+                >
+                  Выйти из аккаунта
+
+                </button>
               </div>
             )}
             
@@ -299,6 +325,7 @@ const ProfileModule = () => {
                   Сменить пароль
                 </button>
               </form>
+              
             </div>
           </div>
         </div>
