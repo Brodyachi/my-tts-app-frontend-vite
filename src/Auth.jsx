@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Sun, Moon } from "react-feather";
 
 const loginSchema = yup.object().shape({
   username: yup.string().required('Логин обязателен'),
@@ -139,7 +140,7 @@ const AuthSwitcher = () => {
         onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
         className="fixed top-4 right-4 p-2 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition-colors"
       >
-        {theme === 'light' ? '🌙' : '☀️'}
+        {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
       </button>
 
       <div className="flex flex-1 items-center justify-center p-8">

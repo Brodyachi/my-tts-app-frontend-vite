@@ -13,6 +13,7 @@ const ChatModule = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [theme, setTheme] = useState("light");
+  const [isLoading, setIsLoading] = useState(false); // Новое состояние для загрузки
 
   const [ttsSettings, setTtsSettings] = useState({
     voice: "oksana",
@@ -20,6 +21,7 @@ const ChatModule = () => {
     speed: 1.0,
     format: "oggopus",
   });
+
   useEffect(() => {
     fetchSessionInfo();
     fetchChatHistory();
@@ -68,8 +70,16 @@ const ChatModule = () => {
     formData.append("ttsSettings", JSON.stringify(ttsSettings));
     setUploadedFile(file);
     setNotification({ message: "Файл загружен", type: "success" });
-    console.log("bebra1")
+    
     try {
+      setIsLoading(true); // Включаем индикатор загрузки
+      const userMessage = { text: "Файл", sender: "user"};
+      setMessages((prev) => [...prev, userMessage]);
+      
+      // Добавляем временное сообщение с индикатором загрузки
+      const loadingMessage = { text: "loading", sender: "bot", isLoading: true };
+      setMessages((prev) => [...prev, loadingMessage]);
+      
       const result = await axios.post(
         "http://localhost:5001/upload-document",
         formData,
@@ -78,14 +88,17 @@ const ChatModule = () => {
           withCredentials: true,
         }
       );
-      const userMessage = { text: "Файл", sender: "user"};
-      setMessages((prev) => [...prev, userMessage]);
+      
+      // Удаляем сообщение с индикатором загрузки и добавляем реальный ответ
+      setMessages(prev => prev.filter(msg => !msg.isLoading));
       const botReply = { text: result.data.request_url, sender: "bot" };
-      console.log("bebra2")
       setMessages((prev) => [...prev, botReply]);
       setNotification({ message: "Документ успешно обработан", type: "success" });
     } catch (error) {
+      setMessages(prev => prev.filter(msg => !msg.isLoading));
       setNotification({ message: "Ошибка обработки документа", type: "error" });
+    } finally {
+      setIsLoading(false); // Выключаем индикатор загрузки
     }
   };
   
@@ -100,13 +113,21 @@ const ChatModule = () => {
         const newMessage = { text: chatInput, sender: "user" };
         setMessages((prev) => [...prev, newMessage]);
         setChatInput("");
+        
+        setIsLoading(true); // Включаем индикатор загрузки
+        
+        // Добавляем временное сообщение с индикатором загрузки
+        const loadingMessage = { text: "loading", sender: "bot", isLoading: true };
+        setMessages((prev) => [...prev, loadingMessage]);
   
         const result = await axios.post(
           "http://localhost:5001/api-request",
           { text: chatInput, ttsSettings },
           { withCredentials: true }
         );
-  
+        
+        // Удаляем сообщение с индикатором загрузки и добавляем реальный ответ
+        setMessages(prev => prev.filter(msg => !msg.isLoading));
         const botReply = { text: result.data.request_url, sender: "bot" };
         setMessages((prev) => [...prev, botReply]);
         setNotification({
@@ -115,7 +136,10 @@ const ChatModule = () => {
         });
       }
     } catch (error) {
+      setMessages(prev => prev.filter(msg => !msg.isLoading));
       setNotification({ message: "Ошибка запроса", type: "error" });
+    } finally {
+      setIsLoading(false); // Выключаем индикатор загрузки
     }
   };
   
@@ -244,7 +268,14 @@ const ChatModule = () => {
               >
                 {msg.sender === "bot" ? (
                   <>
-                    <audio controls src={msg.text}></audio>
+                    {msg.isLoading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-600"></div>
+                        <span className="ml-2">Обработка...</span>
+                      </div>
+                    ) : (
+                      <audio controls src={msg.text}></audio>
+                    )}
                   </>
                 ) : (
                   msg.file ? `Файл: ${msg.text}` : msg.text
