@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X, Key, User, Mail } from "react-feather";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
-const ProfileModule = () => {
+
+const ProfileModule = ({theme, setTheme}) => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [theme, setTheme] = useState("light");
   const [userData, setUserData] = useState(null);
   const [passwordForm, setPasswordForm] = useState({
     oldPassword: "",
@@ -200,13 +200,6 @@ const ProfileModule = () => {
                 >
                   Профиль
                 </button>
-                <button
-                  value="edit"
-                  onClick={toggleMenu}
-                  className={`${theme === "light" ? "text-white hover:bg-gray-100" : "text-white hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
-                >
-                  Редактор запросов
-                </button>
               </div>
             </div>
           </motion.div>
@@ -229,7 +222,7 @@ const ProfileModule = () => {
           </button>
         </div>
 
-        <div className={`flex-1 p-6 overflow-auto transition-all ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`}>
+        <div className={`flex-1 p-6 overflow-auto transition-all ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`} onClick={() => setIsSidebarOpen(false)}>
           <div className="max-w-3xl mx-auto">
             <h2 className={`text-2xl font-bold mb-6 ${theme === "light" ? "text-gray-800" : "text-white"}`}>Профиль пользователя</h2>
             

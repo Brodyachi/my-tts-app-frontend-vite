@@ -1,19 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X, Upload, Send } from "react-feather";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
 
-const ChatModule = () => {
+const ChatModule = ({theme, setTheme}) => {
   const navigate = useNavigate();
   const [chatInput, setChatInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [notification, setNotification] = useState({ message: "", type: "" });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
-  const [theme, setTheme] = useState("light");
-  const [isLoading, setIsLoading] = useState(false); // Новое состояние для загрузки
+  const [isLoading, setIsLoading] = useState(false);
+
+  const chatContainerRef = useRef(null);
+
+  const scrollToBottom = () =>{
+    const container = chatContainerRef.current;
+    container.scrollTop = container.scrollHeight;
+  };
 
   const [ttsSettings, setTtsSettings] = useState({
     voice: "oksana",
@@ -26,6 +32,10 @@ const ChatModule = () => {
     fetchSessionInfo();
     fetchChatHistory();
   }, []);
+
+  useEffect(()=>{
+    scrollToBottom();
+  }, [messages]);
 
   const fetchSessionInfo = async () => {
     try {
@@ -72,11 +82,10 @@ const ChatModule = () => {
     setNotification({ message: "Файл загружен", type: "success" });
     
     try {
-      setIsLoading(true); // Включаем индикатор загрузки
+      setIsLoading(true);
       const userMessage = { text: "Файл", sender: "user"};
       setMessages((prev) => [...prev, userMessage]);
-      
-      // Добавляем временное сообщение с индикатором загрузки
+
       const loadingMessage = { text: "loading", sender: "bot", isLoading: true };
       setMessages((prev) => [...prev, loadingMessage]);
       
@@ -89,7 +98,6 @@ const ChatModule = () => {
         }
       );
       
-      // Удаляем сообщение с индикатором загрузки и добавляем реальный ответ
       setMessages(prev => prev.filter(msg => !msg.isLoading));
       const botReply = { text: result.data.request_url, sender: "bot" };
       setMessages((prev) => [...prev, botReply]);
@@ -98,7 +106,7 @@ const ChatModule = () => {
       setMessages(prev => prev.filter(msg => !msg.isLoading));
       setNotification({ message: "Ошибка обработки документа", type: "error" });
     } finally {
-      setIsLoading(false); // Выключаем индикатор загрузки
+      setIsLoading(false);
     }
   };
   
@@ -114,9 +122,8 @@ const ChatModule = () => {
         setMessages((prev) => [...prev, newMessage]);
         setChatInput("");
         
-        setIsLoading(true); // Включаем индикатор загрузки
-        
-        // Добавляем временное сообщение с индикатором загрузки
+        setIsLoading(true);
+
         const loadingMessage = { text: "loading", sender: "bot", isLoading: true };
         setMessages((prev) => [...prev, loadingMessage]);
   
@@ -125,8 +132,7 @@ const ChatModule = () => {
           { text: chatInput, ttsSettings },
           { withCredentials: true }
         );
-        
-        // Удаляем сообщение с индикатором загрузки и добавляем реальный ответ
+
         setMessages(prev => prev.filter(msg => !msg.isLoading));
         const botReply = { text: result.data.request_url, sender: "bot" };
         setMessages((prev) => [...prev, botReply]);
@@ -139,7 +145,7 @@ const ChatModule = () => {
       setMessages(prev => prev.filter(msg => !msg.isLoading));
       setNotification({ message: "Ошибка запроса", type: "error" });
     } finally {
-      setIsLoading(false); // Выключаем индикатор загрузки
+      setIsLoading(false);
     }
   };
   
@@ -193,13 +199,6 @@ const ChatModule = () => {
                 >
                   Профиль
                 </button>
-                <button
-                  value="edit"
-                  onClick={toggleMenu}
-                  className={`${theme === "light" ? "text-white hover:bg-gray-100" : "text-white hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
-                >
-                  Редактор запросов
-                </button>
               </div>
               <div className="space-y-4">
                 <div>
@@ -251,7 +250,7 @@ const ChatModule = () => {
           </button>
         </div>
 
-        <div className={`flex-1 p-4 overflow-auto transition-all ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`}>
+        <div className={`flex-1 p-4 overflow-auto transition-all ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`} onClick={() => setIsSidebarOpen(false)} ref={chatContainerRef}>
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -274,7 +273,9 @@ const ChatModule = () => {
                         <span className="ml-2">Обработка...</span>
                       </div>
                     ) : (
-                      <audio controls src={msg.text}></audio>
+                      <>
+                        <audio controls src={msg.text}></audio>
+                      </>
                     )}
                   </>
                 ) : (
@@ -285,7 +286,7 @@ const ChatModule = () => {
           ))}
         </div>
 
-        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 transition-all border-t ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}>
+        <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 transition-all border-t ${theme === "light" ? "border-gray-200" : "border-gray-700"}`} onClick={() => setIsSidebarOpen(false)}>
           <form onSubmit={onSubmit} className="flex gap-2">
             <input
               type="text"

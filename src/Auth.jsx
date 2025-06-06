@@ -27,7 +27,7 @@ const sendCodeToEmail = async (email) => {
   }
 };
 
-const AuthSwitcher = () => {
+const AuthSwitcher = ({ theme, setTheme }) => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [isResetPassword, setIsResetPassword] = useState(false);
@@ -36,7 +36,6 @@ const AuthSwitcher = () => {
   const [password, setPassword] = useState('');
   const [codeIn, setCodeIn] = useState("");
   const [notification, setNotification] = useState({ message: '', type: '' });
-  const [theme, setTheme] = useState('light');
   const [isLoading, setIsLoading] = useState(false);
   const schema = isLogin ? loginSchema : registerSchema;
 
