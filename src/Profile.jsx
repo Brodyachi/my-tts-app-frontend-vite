@@ -55,9 +55,9 @@ const ProfileModule = ({theme, setTheme}) => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
+      const response = await axios.get("https://rasa-tts-server.onrender.com/session-info", { withCredentials: true });
       if (response.data.user) {
-        const userResponse = await axios.get(`http://localhost:5001/user/${response.data.user}`, { withCredentials: true });
+        const userResponse = await axios.get(`https://rasa-tts-server.onrender.com/user/${response.data.user}`, { withCredentials: true });
         setUserData(userResponse.data);
       }
     } catch (error) {
@@ -83,7 +83,7 @@ const ProfileModule = ({theme, setTheme}) => {
     }
   
     try {
-      const response = await axios.post('http://localhost:5001/changepassword', {
+      const response = await axios.post('https://rasa-tts-server.onrender.com/changepassword', {
         oldPassword: passwordForm.oldPassword,
         newPassword: passwordForm.newPassword
       }, { withCredentials: true });
@@ -151,7 +151,7 @@ const ProfileModule = ({theme, setTheme}) => {
   const Logout = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5001/log-out", 
+        "https://rasa-tts-server.onrender.com/log-out", 
         {},
         { withCredentials: true }
       );

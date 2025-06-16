@@ -20,7 +20,7 @@ const registerSchema = yup.object().shape({
 
 const sendCodeToEmail = async (email) => {
   try {
-    const response = await axios.post('http://localhost:5001/send-code', { email });
+    const response = await axios.post('https://rasa-tts-server.onrender.com/send-code', { email });
     return { success: true, message: response.data.message };
   } catch (error) {
     return { success: false, message: 'Ошибка отправки кода. Попробуйте снова.' + error };
@@ -66,7 +66,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
     setIsLoading(true);
     setNotification({ message: '', type: '' });
     try {
-      const response = await axios.post('http://localhost:5001/log-in', {
+      const response = await axios.post('https://rasa-tts-server.onrender.com/log-in', {
         username,
         password,
       }, { 
@@ -107,7 +107,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
   
   const handlePasswordReset = async () => {
     try {
-      const result = await axios.post('http://localhost:5001/password-reset', { email });
+      const result = await axios.post('https://rasa-tts-server.onrender.com/password-reset', { email });
       setNotification({ message: result.data.message, type: result.data.success ? 'success' : 'error' });
     } catch (error) {
       setNotification({ message: 'Ошибка сброса пароля. Попробуйте снова.', type: 'error' });
@@ -116,7 +116,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
   
   const handleRegistrate = async () => {
     try {
-      const result = await axios.post('http://localhost:5001/verify-code', {
+      const result = await axios.post('https://rasa-tts-server.onrender.com/verify-code', {
         username,
         password,
         email,

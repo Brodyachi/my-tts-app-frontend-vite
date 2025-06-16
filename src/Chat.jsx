@@ -39,7 +39,7 @@ const ChatModule = ({theme, setTheme}) => {
 
   const fetchSessionInfo = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/session-info", { withCredentials: true });
+      const response = await axios.get("https://rasa-tts-server.onrender.com/session-info", { withCredentials: true });
       console.log("Информация о сессии:", response.data);
     } catch (error) {
       console.error("Не удалось получить информацию о сессии:", error);
@@ -48,7 +48,7 @@ const ChatModule = ({theme, setTheme}) => {
 
   const fetchChatHistory = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/chat-history", { withCredentials: true });
+      const response = await axios.get("https://rasa-tts-server.onrender.com/chat-history", { withCredentials: true });
       setMessages(response.data);
     } catch (error) {
       console.error("Ошибка загрузки истории чата:", error);
@@ -90,7 +90,7 @@ const ChatModule = ({theme, setTheme}) => {
       setMessages((prev) => [...prev, loadingMessage]);
       
       const result = await axios.post(
-        "http://localhost:5001/upload-document",
+        "https://rasa-tts-server.onrender.com/upload-document",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -128,7 +128,7 @@ const ChatModule = ({theme, setTheme}) => {
         setMessages((prev) => [...prev, loadingMessage]);
   
         const result = await axios.post(
-          "http://localhost:5001/api-request",
+          "https://rasa-tts-server.onrender.com/api-request",
           { text: chatInput, ttsSettings },
           { withCredentials: true }
         );
