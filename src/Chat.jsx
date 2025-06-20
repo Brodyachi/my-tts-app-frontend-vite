@@ -39,7 +39,9 @@ const ChatModule = ({theme, setTheme}) => {
 
   const fetchSessionInfo = async () => {
     try {
-      const response = await axios.get("https://rasa-tts-server.onrender.com/session-info" );
+      const response = await axios.get("https://rasa-tts-server.onrender.com/session-info", {
+      withCredentials: true,
+    } );
       console.log("Информация о сессии:", response.data);
     } catch (error) {
       console.error("Не удалось получить информацию о сессии:", error);
@@ -48,7 +50,9 @@ const ChatModule = ({theme, setTheme}) => {
 
   const fetchChatHistory = async () => {
     try {
-      const response = await axios.get("https://rasa-tts-server.onrender.com/chat-history" );
+      const response = await axios.get("https://rasa-tts-server.onrender.com/chat-history", {
+      withCredentials: true, 
+    } );
       setMessages(response.data);
       console.log(messages);
     } catch (error) {
