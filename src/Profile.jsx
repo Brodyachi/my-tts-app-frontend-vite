@@ -224,7 +224,7 @@ const ProfileModule = ({theme, setTheme}) => {
 
         <div className={`flex-1 p-6 overflow-auto transition-all ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`} onClick={() => setIsSidebarOpen(false)}>
           <div className="max-w-3xl mx-auto">
-            <h2 className={`text-2xl font-bold mb-6 ${theme === "light" ? "text-gray-800" : "text-black"}`}>Профиль пользователя</h2>
+            <h2 className={`text-2xl font-bold mb-6 ${theme === "light" ? "text-gray-800" : "text-White"}`}>Профиль пользователя</h2>
             
             {userData && (
               <div className={`mb-8 p-6 rounded-lg ${theme === "light" ? "bg-white shadow" : "bg-gray-800"}`}>
@@ -233,14 +233,14 @@ const ProfileModule = ({theme, setTheme}) => {
                     <User className={`${theme === "light" ? "text-blue-800" : "text-blue-300"}`} size={24} />
                   </div>
                   <div>
-                    <h3 className={`text-xl font-semibold ${theme === "light" ? "text-gray-800" : "text-black"}`}>{userData.login}</h3>
+                    <h3 className={`text-xl font-semibold ${theme === "light" ? "text-gray-800" : "text-white"}`}>{userData.login}</h3>
                     <p className={`${theme === "light" ? "text-gray-600" : "text-gray-300"}`}>ID: {userData.id}</p>
                   </div>
                 </div>
                 
                 <div className="flex items-center mb-4">
                   <Mail className={`mr-3 ${theme === "light" ? "text-gray-600" : "text-gray-300"}`} size={18} />
-                  <span className={`${theme === "light" ? "text-gray-800" : "text-black"}`}>{userData.email}</span>
+                  <span className={`${theme === "light" ? "text-gray-800" : "text-white"}`}>{userData.email}</span>
                 </div>
                 <button
                   type="button"
@@ -258,7 +258,7 @@ const ProfileModule = ({theme, setTheme}) => {
                 <div className={`p-3 rounded-full mr-4 ${theme === "light" ? "bg-blue-100" : "bg-blue-900"}`}>
                   <Key className={`${theme === "light" ? "text-blue-800" : "text-blue-300"}`} size={24} />
                 </div>
-                <h3 className={`text-xl font-semibold ${theme === "light" ? "text-gray-800" : "text-black"}`}>Смена пароля</h3>
+                <h3 className={`text-xl font-semibold ${theme === "light" ? "text-gray-800" : "text-white"}`}>Смена пароля</h3>
               </div>
               
               {message.text && (
@@ -278,7 +278,7 @@ const ProfileModule = ({theme, setTheme}) => {
                     name="oldPassword"
                     value={passwordForm.oldPassword}
                     onChange={handleInputChange}
-                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300 text-black" : "bg-gray-700 border-gray-600 text-black"}`}
+                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300 text-black" : "bg-gray-700 border-gray-600 text-white"}`}
                     required
                   />
                 </div>
@@ -292,7 +292,7 @@ const ProfileModule = ({theme, setTheme}) => {
                     name="newPassword"
                     value={passwordForm.newPassword}
                     onChange={handleInputChange}
-                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300 text-black" : "bg-gray-700 border-gray-600 text-black"}`}
+                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300 text-black" : "bg-gray-700 border-gray-600 text-white"}`}
                     required
                   />
                 </div>
@@ -306,7 +306,7 @@ const ProfileModule = ({theme, setTheme}) => {
                     name="confirmPassword"
                     value={passwordForm.confirmPassword}
                     onChange={handleInputChange}
-                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300 text-black" : "bg-gray-700 border-gray-600 text-black"}`}
+                    className={`w-full p-3 rounded border ${theme === "light" ? "bg-white border-gray-300 text-black" : "bg-gray-700 border-gray-600 text-white"}`}
                     required
                   />
                 </div>

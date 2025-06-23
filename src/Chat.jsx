@@ -209,7 +209,7 @@ const ChatModule = ({theme, setTheme}) => {
                 <div>
                   <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm `}>Голос</label>
                   <select
-                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-black "} p-2 rounded mt-1`}
+                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-gray-300 "} p-2 rounded mt-1`}
                     value={ttsSettings.voice}
                     onChange={(e) => handleTtsSettingChange("voice", e.target.value)}
                   >
@@ -231,7 +231,7 @@ const ChatModule = ({theme, setTheme}) => {
                     onChange={(e) => handleTtsSettingChange("speed", parseFloat(e.target.value))}
                     className={`w-full ${theme === "light" ? "bg-gray-100" : "bg-gray-700"} rounded mt-1 `}
                   />
-                  <span className={`${theme === "light" ? "text-gray-800" : "text-black"} text-sm `}>{ttsSettings.speed}</span>
+                  <span className={`${theme === "light" ? "text-gray-800" : "text-gray-300"} text-sm `}>{ttsSettings.speed}</span>
                 </div>
               </div>
             </div>
@@ -298,16 +298,16 @@ const ChatModule = ({theme, setTheme}) => {
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               placeholder="Введите сообщение..."
-              className={`flex-1 p-2 ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-black"} rounded-lg focus:outline-none`}
+              className={`flex-1 p-2 ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-white"} rounded-lg focus:outline-none`}
             />
             <button
               type="submit"
-              className={`${theme === "light" ? "bg-blue-500 text-black" : "bg-blue-600 text-black"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
+              className={`${theme === "light" ? "bg-blue-500 text-black" : "bg-blue-600 text-white"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
             >
               <Send size={20} />
             </button>
           </form>
-          <label className={`${theme === "light" ? "text-gray-800" : "text-black"} mt-2 flex items-center gap-2 cursor-pointer`}>
+          <label className={`${theme === "light" ? "text-gray-800" : "text-white"} mt-2 flex items-center gap-2 cursor-pointer`}>
             <Upload size={20} />
             <input
               type="file"
