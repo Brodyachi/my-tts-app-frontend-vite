@@ -176,7 +176,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
               </>
             ) : (
               <>
-                <h2 className={`text-2xl font-bold text-center ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>{isLogin ? 'Вход' : 'Регистрация'}</h2>
+                <h2 className={`text-2xl font-bold text-center ${theme === 'dark' ? ' text-white' : ' text-black'}`}>{isLogin ? 'Вход' : 'Регистрация'}</h2>
                 <input
                   {...register('username')}
                   value={username}
