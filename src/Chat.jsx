@@ -188,7 +188,7 @@ const ChatModule = ({theme, setTheme}) => {
               <X size={20} />
             </button>
             <div className="mt-4">
-              <h2 className={`${theme === "light" ? "text-gray-800" : "text-black"} text-lg font-semibold mb-4 `}>Чат</h2>
+              <h2 className={`${theme === "light" ? "text-gray-800" : "text-white"} text-lg font-semibold mb-4 `}>Чат</h2>
               <div className="space-y-4">
               <button
                   value="chat"

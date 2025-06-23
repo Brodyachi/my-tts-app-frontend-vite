@@ -184,7 +184,7 @@ const ProfileModule = ({theme, setTheme}) => {
               <X size={20} />
             </button>
             <div className="mt-4">
-              <h2 className={`${theme === "light" ? "text-black" : "text-black"} text-lg font-semibold mb-4`}>Профиль</h2>
+              <h2 className={`${theme === "light" ? "text-black" : "text-white"} text-lg font-semibold mb-4`}>Профиль</h2>
               <div className="space-y-4">
                 <button
                   value="chat"
@@ -224,7 +224,7 @@ const ProfileModule = ({theme, setTheme}) => {
 
         <div className={`flex-1 p-6 overflow-auto transition-all ${theme === "light" ? "bg-gray-50" : "bg-gray-900"}`} onClick={() => setIsSidebarOpen(false)}>
           <div className="max-w-3xl mx-auto">
-            <h2 className={`text-2xl font-bold mb-6 ${theme === "light" ? "text-gray-800" : "text-White"}`}>Профиль пользователя</h2>
+            <h2 className={`text-2xl font-bold mb-6 ${theme === "light" ? "text-gray-800" : "text-white"}`}>Профиль пользователя</h2>
             
             {userData && (
               <div className={`mb-8 p-6 rounded-lg ${theme === "light" ? "bg-white shadow" : "bg-gray-800"}`}>
