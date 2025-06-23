@@ -183,24 +183,24 @@ const ChatModule = ({theme, setTheme}) => {
           >
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full  duration-300`}
+              className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full  duration-300`}
             >
               <X size={20} />
             </button>
             <div className="mt-4">
-              <h2 className={`${theme === "light" ? "text-gray-800" : "text-white"} text-lg font-semibold mb-4 `}>Чат</h2>
+              <h2 className={`${theme === "light" ? "text-gray-800" : "text-black"} text-lg font-semibold mb-4 `}>Чат</h2>
               <div className="space-y-4">
               <button
                   value="chat"
                   onClick={toggleMenu}
-                  className={`${theme === "light" ? "text-white hover:bg-gray-100" : "text-white hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
+                  className={`${theme === "light" ? "text-black hover:bg-gray-100" : "text-black hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
                 >
                   Чат
                 </button>
                 <button
                   value="profile"
                   onClick={toggleMenu}
-                  className={`${theme === "light" ? "bg-blue-100 text-white" : "bg-blue-900 text-white"} p-2 rounded-lg w-full text-left duration-300`}
+                  className={`${theme === "light" ? "bg-blue-100 text-black" : "bg-blue-900 text-black"} p-2 rounded-lg w-full text-left duration-300`}
                 >
                   Профиль
                 </button>
@@ -209,7 +209,7 @@ const ChatModule = ({theme, setTheme}) => {
                 <div>
                   <label className={`${theme === "light" ? "text-gray-700" : "text-gray-300"} text-sm `}>Голос</label>
                   <select
-                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-white "} p-2 rounded mt-1`}
+                    className={`w-full ${theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-700 text-black "} p-2 rounded mt-1`}
                     value={ttsSettings.voice}
                     onChange={(e) => handleTtsSettingChange("voice", e.target.value)}
                   >
@@ -231,7 +231,7 @@ const ChatModule = ({theme, setTheme}) => {
                     onChange={(e) => handleTtsSettingChange("speed", parseFloat(e.target.value))}
                     className={`w-full ${theme === "light" ? "bg-gray-100" : "bg-gray-700"} rounded mt-1 `}
                   />
-                  <span className={`${theme === "light" ? "text-gray-800" : "text-white"} text-sm `}>{ttsSettings.speed}</span>
+                  <span className={`${theme === "light" ? "text-gray-800" : "text-black"} text-sm `}>{ttsSettings.speed}</span>
                 </div>
               </div>
             </div>
@@ -243,13 +243,13 @@ const ChatModule = ({theme, setTheme}) => {
         <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 shadow-md flex items-center justify-between transition-all`}>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
+            className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             <Menu size={24} />
           </button>
           <button
             onClick={toggleTheme}
-            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
+            className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
           </button>
@@ -266,7 +266,7 @@ const ChatModule = ({theme, setTheme}) => {
               <div
                 className={`inline-block p-3 rounded-lg transition-all ${
                   msg.sender === "user"
-                    ? `${theme === "light" ? "bg-blue-500 text-white" : "bg-blue-600 text-black"}`
+                    ? `${theme === "light" ? "bg-blue-500 text-black" : "bg-blue-600 text-black"}`
                     : `${theme === "light" ? "bg-gray-200 text-gray-800" : "bg-gray-700 text-gray-200"}`
                 }`}
               >
@@ -302,12 +302,12 @@ const ChatModule = ({theme, setTheme}) => {
             />
             <button
               type="submit"
-              className={`${theme === "light" ? "bg-blue-500 text-white" : "bg-blue-600 text-white"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
+              className={`${theme === "light" ? "bg-blue-500 text-black" : "bg-blue-600 text-black"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
             >
               <Send size={20} />
             </button>
           </form>
-          <label className={`${theme === "light" ? "text-gray-800" : "text-white"} mt-2 flex items-center gap-2 cursor-pointer`}>
+          <label className={`${theme === "light" ? "text-gray-800" : "text-black"} mt-2 flex items-center gap-2 cursor-pointer`}>
             <Upload size={20} />
             <input
               type="file"
