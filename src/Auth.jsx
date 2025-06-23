@@ -176,7 +176,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
               </>
             ) : (
               <>
-                <h2 className="text-2xl font-bold text-center">{isLogin ? 'Вход' : 'Регистрация'}</h2>
+                <h2 className={`text-2xl font-bold text-center ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>{isLogin ? 'Вход' : 'Регистрация'}</h2>
                 <input
                   {...register('username')}
                   value={username}
@@ -204,7 +204,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Почта"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}
                     />
                     <p className="text-red-500 text-sm">{errors.email?.message}</p>
 
@@ -221,7 +221,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                       value={codeIn}
                       onChange={(e) => setCodeIn(e.target.value)}
                       placeholder="Код"
-                      className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}
                     />
                     <p className="text-red-500 text-sm">{errors.code?.message}</p>
                   </>
