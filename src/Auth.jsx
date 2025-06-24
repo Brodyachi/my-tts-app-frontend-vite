@@ -133,24 +133,19 @@ const AuthSwitcher = ({ theme, setTheme }) => {
   };
 
   return (
-    <div className={`min-h-screen min-w-screen flex flex-col ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+    <div className={`min-h-screen min-w-screen flex flex-col ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
+
       <button
         onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-        className={`bg-gray-800 fixed top-4 right-4 p-2 rounded-full shadow-lg transition-colors ${
-          theme === 'light' ? 'bg-indigo-600 text-white' : 'bg-yellow-400 text-gray-900'
-        }`}
+        className="fixed top-4 right-4 p-2 bg-indigo-600 text-black rounded-full shadow-lg hover:bg-indigo-700 transition-colors"
       >
         {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
       </button>
 
       <div className="flex flex-1 items-center justify-center p-8">
-        <div className={`w-full max-w-md p-8 rounded-lg shadow-2xl transition-all ${
-          theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-        }`}>
+        <div className={`w-full max-w-md p-8 rounded-lg shadow-2xl transition-all ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
           {notification.message && (
-            <div className={`mb-4 px-4 py-2 rounded ${
-              notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            } text-white text-center`}>
+            <div className={`mb-4 px-4 py-2 rounded ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-black text-center`}>
               {notification.message}
             </div>
           )}
@@ -159,45 +154,35 @@ const AuthSwitcher = ({ theme, setTheme }) => {
             {isResetPassword ? (
               <>
                 <h2 className="text-2xl font-bold text-center">Сброс пароля</h2>
-                <input
+                <inputн
                   type="email"
                   {...register('email')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Почта"
-                  className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                    theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'
-                  }`}
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="text-red-500 text-sm">{errors.email?.message}</p>
-                <button 
-                  type="button" 
-                  onClick={handlePasswordReset} 
-                  className={`w-full py-2 rounded transition-colors ${
-                    theme === 'dark' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-indigo-600 hover:bg-indigo-700'
-                  } text-white`}
-                >
+                <button type="button" onClick={handlePasswordReset} className="w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors">
                   Отправить запрос
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsResetPassword(false)}
-                  className={`w-full mt-2 ${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'} hover:underline`}
+                  className="w-full mt-2 text-indigo-600 hover:underline"
                 >
                   Назад
                 </button>
               </>
             ) : (
               <>
-                <h2 className="bg-gray-800 text-2xl font-bold text-center">{isLogin ? 'Вход' : 'Регистрация'}</h2>
+                <h2 className={`text-2xl font-bold text-center ${theme === 'dark' ? ' text-white' : ' text-black'}`}>{isLogin ? 'Вход' : 'Регистрация'}</h2>
                 <input
                   {...register('username')}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Логин"
-                  className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                    theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'
-                  }`}
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="text-red-500 text-sm">{errors.username?.message}</p>
 
@@ -207,9 +192,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Пароль"
-                  className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                    theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'
-                  }`}
+                  className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="text-red-500 text-sm">{errors.password?.message}</p>
 
@@ -221,18 +204,14 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Почта"
-                      className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'
-                      }`}
+                      className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}
                     />
                     <p className="text-red-500 text-sm">{errors.email?.message}</p>
 
                     <button
                       type="button"
                       onClick={handleSendCode}
-                      className={`bg-gray-800 w-full py-2 rounded transition-colors ${
-                        theme === 'dark' ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-yellow-500 hover:bg-yellow-600'
-                      } text-white bg-gray-800`}
+                      className="w-full bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600 transition-colors"
                     >
                       Отправить код на почту
                     </button>
@@ -242,9 +221,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                       value={codeIn}
                       onChange={(e) => setCodeIn(e.target.value)}
                       placeholder="Код"
-                      className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        theme === 'dark' ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-black border-gray-300'
-                      }`}
+                      className={`w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}
                     />
                     <p className="text-red-500 text-sm">{errors.code?.message}</p>
                   </>
@@ -253,30 +230,24 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full py-2 rounded transition-colors ${
-                    theme === 'dark' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-indigo-600 hover:bg-indigo-700'
-                  } text-white ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {isLoading ? 'Загрузка...' : isLogin ? 'Войти' : 'Зарегистрироваться'}
                 </button>
 
-                <div className="flex flex-col items-center space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsLogin(!isLogin)}
-                    className={`${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'} hover:underline`}
-                  >
-                    {isLogin ? 'Переключиться на Регистрацию' : 'Переключиться на Вход'}
-                  </button>
+                <p
+                  className="text-center text-indigo-600 cursor-pointer hover:underline"
+                  onClick={() => setIsLogin(!isLogin)}
+                >
+                  {isLogin ? 'Переключиться на Регистрацию' : 'Переключиться на Вход'}
+                </p>
 
-                  <button
-                    type="button"
-                    onClick={() => setIsResetPassword(true)}
-                    className={`${theme === 'dark' ? 'text-indigo-400' : 'text-indigo-600'} hover:underline`}
-                  >
-                    Сброс пароля
-                  </button>
-                </div>
+                <p
+                  className="text-center text-indigo-600 cursor-pointer hover:underline"
+                  onClick={() => setIsResetPassword(true)}
+                >
+                  Сброс пароля
+                </p>
               </>
             )}
           </form>
