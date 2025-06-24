@@ -193,14 +193,14 @@ const ChatModule = ({theme, setTheme}) => {
               <button
                   value="chat"
                   onClick={toggleMenu}
-                  className={`${theme === "light" ? "text-black hover:bg-gray-100" : "text-black hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
+                  className={`${theme === "light" ? "text-white hover:bg-gray-800" : "text-white hover:bg-gray-800"} p-2 rounded-lg w-full text-left duration-300`}
                 >
                   Чат
                 </button>
                 <button
                   value="profile"
                   onClick={toggleMenu}
-                  className={`${theme === "light" ? "bg-blue-100 text-black" : "bg-blue-900 text-black"} p-2 rounded-lg w-full text-left duration-300`}
+                  className={`${theme === "light" ? "bg-gray-800 text-white" : "bg-gray-800 text-white"} p-2 rounded-lg w-full text-left duration-300`}
                 >
                   Профиль
                 </button>
@@ -243,13 +243,13 @@ const ChatModule = ({theme, setTheme}) => {
         <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 shadow-md flex items-center justify-between transition-all`}>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             <Menu size={24} />
           </button>
           <button
             onClick={toggleTheme}
-            className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
           </button>
@@ -302,7 +302,7 @@ const ChatModule = ({theme, setTheme}) => {
             />
             <button
               type="submit"
-              className={`${theme === "light" ? "bg-blue-500 text-black" : "bg-blue-600 text-white"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
+              className={`${theme === "light" ? "bg-blue-500 text-white" : "bg-blue-600 text-white"} p-2 rounded-lg hover:bg-blue-600 transition-colors duration-300`}
             >
               <Send size={20} />
             </button>
