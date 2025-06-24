@@ -136,7 +136,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
     <div className={`min-h-screen min-w-screen flex flex-col ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
       <button
         onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-        className={`fixed top-4 right-4 p-2 rounded-full shadow-lg transition-colors ${
+        className={`bg-gray-800 fixed top-4 right-4 p-2 rounded-full shadow-lg transition-colors ${
           theme === 'light' ? 'bg-indigo-600 text-white' : 'bg-yellow-400 text-gray-900'
         }`}
       >
@@ -189,7 +189,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
               </>
             ) : (
               <>
-                <h2 className="text-2xl font-bold text-center">{isLogin ? 'Вход' : 'Регистрация'}</h2>
+                <h2 className="bg-gray-800 text-2xl font-bold text-center">{isLogin ? 'Вход' : 'Регистрация'}</h2>
                 <input
                   {...register('username')}
                   value={username}
@@ -230,9 +230,9 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                     <button
                       type="button"
                       onClick={handleSendCode}
-                      className={`w-full py-2 rounded transition-colors ${
+                      className={`bg-gray-800 w-full py-2 rounded transition-colors ${
                         theme === 'dark' ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-yellow-500 hover:bg-yellow-600'
-                      } text-white`}
+                      } text-white bg-gray-800`}
                     >
                       Отправить код на почту
                     </button>
