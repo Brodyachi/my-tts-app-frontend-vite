@@ -137,7 +137,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
       <button
         onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
         className={`bg-gray-800 fixed top-4 right-4 p-2 rounded-full shadow-lg transition-colors ${
-          theme === 'light' ? 'bg-indigo-600 text-white' : 'bg-yellow-400 text-gray-900'
+          theme === 'light' ? 'bg-gray-800 text-white' : 'bg-gray-800 text-white'
         }`}
       >
         {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
@@ -174,8 +174,8 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                   type="button" 
                   onClick={handlePasswordReset} 
                   className={`w-full py-2 rounded transition-colors ${
-                    theme === 'dark' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-indigo-600 hover:bg-indigo-700'
-                  } text-white`}
+                    theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-800 text-white'
+                  }`}
                 >
                   Отправить запрос
                 </button>
@@ -189,7 +189,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
               </>
             ) : (
               <>
-                <h2 className="bg-gray-800 text-2xl font-bold text-center">{isLogin ? 'Вход' : 'Регистрация'}</h2>
+                <h2 className="bg-gray-800 text-white text-2xl font-bold text-center">{isLogin ? 'Вход' : 'Регистрация'}</h2>
                 <input
                   {...register('username')}
                   value={username}
@@ -231,8 +231,8 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                       type="button"
                       onClick={handleSendCode}
                       className={`bg-gray-800 w-full py-2 rounded transition-colors ${
-                        theme === 'dark' ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-yellow-500 hover:bg-yellow-600'
-                      } text-white bg-gray-800`}
+                        theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-800 text-white'
+                      }`}
                     >
                       Отправить код на почту
                     </button>
