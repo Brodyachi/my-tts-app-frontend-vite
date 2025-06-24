@@ -179,7 +179,7 @@ const ProfileModule = ({theme, setTheme}) => {
           >
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full duration-300`}
+              className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full duration-300`}
             >
               <X size={20} />
             </button>
@@ -189,14 +189,14 @@ const ProfileModule = ({theme, setTheme}) => {
                 <button
                   value="chat"
                   onClick={toggleMenu}
-                  className={`${theme === "light" ? "text-black hover:bg-gray-100" : "text-black hover:bg-gray-700"} p-2 rounded-lg w-full text-left duration-300`}
+                  className={`${theme === "light" ? "text-white hover:bg-gray-800" : "text-white hover:bg-gray-800"} p-2 rounded-lg w-full text-left duration-300`}
                 >
                   Чат
                 </button>
                 <button
                   value="profile"
                   onClick={toggleMenu}
-                  className={`${theme === "light" ? "bg-blue-100 text-black" : "bg-blue-900 text-black"} p-2 rounded-lg w-full text-left duration-300`}
+                  className={`${theme === "light" ? "bg-gray-800 text-white" : "bg-gray-800 text-white"} p-2 rounded-lg w-full text-left duration-300`}
                 >
                   Профиль
                 </button>
@@ -210,13 +210,13 @@ const ProfileModule = ({theme, setTheme}) => {
         <div className={`${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 shadow-md flex items-center justify-between transition-all`}>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             <Menu size={24} />
           </button>
           <button
             onClick={toggleTheme}
-            className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
+            className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full transition-all duration-300`}
           >
             {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
           </button>
@@ -245,7 +245,7 @@ const ProfileModule = ({theme, setTheme}) => {
                 <button
                   type="button"
                   onClick={()=>Logout()}
-                  className={`w-full py-3 px-4 rounded font-medium ${theme === "light" ? "bg-blue-600 text-black hover:bg-blue-700" : "bg-blue-700 text-black hover:bg-blue-800"} transition-colors`}
+                  className={`w-full py-3 px-4 rounded font-medium ${theme === "light" ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-blue-700 text-white hover:bg-blue-800"} transition-colors`}
                 >
                   Выйти из аккаунта
 
@@ -313,7 +313,7 @@ const ProfileModule = ({theme, setTheme}) => {
                 
                 <button
                   type="submit"
-                  className={`w-full py-3 px-4 rounded font-medium ${theme === "light" ? "bg-blue-600 text-black hover:bg-blue-700" : "bg-blue-700 text-black hover:bg-blue-800"} transition-colors`}
+                  className={`w-full py-3 px-4 rounded font-medium ${theme === "light" ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-blue-700 text-white hover:bg-blue-800"} transition-colors`}
                 >
                   Сменить пароль
                 </button>

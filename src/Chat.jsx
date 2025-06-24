@@ -183,7 +183,7 @@ const ChatModule = ({theme, setTheme}) => {
           >
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className={`${theme === "light" ? "text-black" : "text-black"} p-2 hover:bg-gray-100 rounded-full  duration-300`}
+              className={`${theme === "light" ? "text-white" : "text-white"} p-2 hover:bg-gray-100 rounded-full  duration-300`}
             >
               <X size={20} />
             </button>
