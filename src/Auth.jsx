@@ -137,7 +137,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
 
       <button
         onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-        className={`fixed top-4 right-4 p-2 bg-indigo-600 text-black rounded-full shadow-lg hover:bg-indigo-700 transition-colors ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}
+        className="fixed top-4 right-4 p-2 bg-indigo-600 text-black rounded-full shadow-lg hover:bg-indigo-700 transition-colors"
       >
         {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
       </button>
@@ -163,7 +163,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="text-red-500 text-sm">{errors.email?.message}</p>
-                <button type="button" onClick={handlePasswordReset} className={`w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+                <button type="button" onClick={handlePasswordReset} className="w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors">
                   Отправить запрос
                 </button>
                 <button
@@ -211,7 +211,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                     <button
                       type="button"
                       onClick={handleSendCode}
-                      className={`w-full bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600 transition-colors ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}
+                      className="w-full bg-yellow-500 text-black py-2 rounded hover:bg-yellow-600 transition-colors"
                     >
                       Отправить код на почту
                     </button>
@@ -230,7 +230,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}
+                  className={`w-full bg-indigo-600 text-black py-2 rounded hover:bg-indigo-700 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {isLoading ? 'Загрузка...' : isLogin ? 'Войти' : 'Зарегистрироваться'}
                 </button>
