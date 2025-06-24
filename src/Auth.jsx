@@ -254,7 +254,7 @@ const AuthSwitcher = ({ theme, setTheme }) => {
                   type="submit"
                   disabled={isLoading}
                   className={`w-full py-2 rounded transition-colors ${
-                    theme === 'dark' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-indigo-600 hover:bg-indigo-700'
+                    theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-800 text-white'
                   } text-white ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {isLoading ? 'Загрузка...' : isLogin ? 'Войти' : 'Зарегистрироваться'}
